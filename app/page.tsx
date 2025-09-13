@@ -65,14 +65,6 @@ export default function Home() {
                 <div className="text-6xl mb-4 animate-pulse-slow">🚗</div>
                 <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">Welcome to CarGPT!</h2>
                 <p className="text-muted-foreground mb-6">Ask me anything about cars, automotive technology, or vehicle maintenance.</p>
-                {!user && (
-                  <Link href="/auth" className="block mb-6">
-                    <div className="rounded-xl border border-blue-200/60 dark:border-blue-900/40 bg-blue-50/60 dark:bg-blue-950/30 px-4 py-3 inline-flex items-center gap-3 hover:shadow transition">
-                      <span className="text-blue-700 dark:text-blue-300 font-medium">请登录解锁更多！</span>
-                      <span className="text-blue-600/80 dark:text-blue-400/80 text-sm">点击前往登录 / 注册</span>
-                    </div>
-                  </Link>
-                )}
                 <div className="flex flex-wrap justify-center gap-2 max-w-lg mx-auto">
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">Car Maintenance</span>
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">Electric Vehicles</span>

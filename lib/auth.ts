@@ -118,3 +118,11 @@ export function getCookieOptions(maxAgeSeconds: number) {
   };
 }
 
+export function getAccessTokenCookieOptions() {
+  return getCookieOptions(ACCESS_TOKEN_TTL_SECONDS);
+}
+
+export function getRefreshTokenCookieOptions(maxAgeSeconds: number) {
+  return getCookieOptions(maxAgeSeconds);
+}
+
