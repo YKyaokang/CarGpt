@@ -18,6 +18,11 @@ export async function middleware(request: NextRequest) {
   // 获取tokens
   const accessToken = request.cookies.get('access_token')?.value;
   const refreshToken = request.cookies.get('refresh_token')?.value;
+  
+  // 调试信息（生产环境可以移除）
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`Middleware: ${pathname}, hasAccessToken: ${!!accessToken}, hasRefreshToken: ${!!refreshToken}`);
+  }
 
   // 验证access token
   if (accessToken) {
@@ -50,6 +55,12 @@ export async function middleware(request: NextRequest) {
 
   // 没有有效的token
   if (!isApiRoute && pathname !== '/auth') {
+    // 检查是否来自登录页面，给一些时间让cookie生效
+    const referer = request.headers.get('referer');
+    if (referer && referer.includes('/auth')) {
+      // 如果是从登录页跳转过来的，暂时允许通过，让客户端处理
+      return NextResponse.next();
+    }
     // 只有页面路由才重定向到登录页
     return NextResponse.redirect(new URL('/auth', request.url));
   }

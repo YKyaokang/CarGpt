@@ -21,11 +21,17 @@ export default function AuthPage() {
       if (mode === "login") {
         await login(email, password);
         setSuccess("登录成功，返回首页体验吧！");
-        router.replace("/");
+        // 给cookie设置一些时间，然后跳转
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 100);
       } else {
         await register({ name, email, password });
         setSuccess("注册并登录成功！");
-        router.replace("/");
+        // 给cookie设置一些时间，然后跳转
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 100);
       }
     } catch (_) {}
   }
