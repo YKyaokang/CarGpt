@@ -5,8 +5,9 @@
   "scripts": {
     "seed": "ts-node --project tsconfig.seed.json seed.ts",
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
-    "start": "next start"
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.19.0",
