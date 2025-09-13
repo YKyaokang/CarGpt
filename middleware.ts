@@ -55,13 +55,29 @@ export async function middleware(request: NextRequest) {
 
   // 没有有效的token
   if (!isApiRoute && pathname !== '/auth') {
-    // 检查是否来自登录页面，给一些时间让cookie生效
-    const referer = request.headers.get('referer');
-    if (referer && referer.includes('/auth')) {
-      // 如果是从登录页跳转过来的，暂时允许通过，让客户端处理
-      return NextResponse.next();
+    // 检查是否有任何token存在（即使无效）
+    const hasAnyToken = accessToken || refreshToken;
+    
+    // 调试信息
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`No valid token for ${pathname}, hasAnyToken: ${hasAnyToken}`);
     }
-    // 只有页面路由才重定向到登录页
+    
+    // 如果有任何token（即使无效），给一些时间让页面加载并让客户端处理
+    if (hasAnyToken) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Has token but invalid, allowing client to handle');
+      }
+      // 设置一个短期标记，避免无限循环
+      const response = NextResponse.next();
+      response.headers.set('x-auth-check', 'pending');
+      return response;
+    }
+    
+    // 完全没有token，重定向到登录页
+    if (process.env.NODE_ENV === 'development') {
+      console.log('No token at all, redirecting to auth page');
+    }
     return NextResponse.redirect(new URL('/auth', request.url));
   }
 
