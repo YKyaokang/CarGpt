@@ -1,5 +1,0 @@
-{
-  "buildCommand": "pnpx prisma generate && next build",
-  "outputDirectory": ".next",
-  "installCommand": "pnpm install && pnpx prisma generate"
-}
