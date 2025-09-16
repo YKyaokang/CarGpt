@@ -1,4 +1,4 @@
-# phoneGPT
+# CarGPT
 - chatbot
   组件，tailwindcss，messages
   ai streaming 复杂 封装？
@@ -123,7 +123,7 @@ CREATE TABLE public.chunks (
 - RPC 调用
   在supabase 数据库中调用一个函数
   针对向量 进行相似度计算 ： cos计算 还要进行排序     
-  PostgreSQL 
+     
   ```sql
   create or replace function get_relevant_chunks(
   -- 一个长度为 1536 的“向量”
@@ -174,3 +174,16 @@ CREATE TABLE public.chunks (
 前端：调用ai-sdk 的一系列api -> 处理用户输入的input（父子组件通信）-> 调用后端接口http://localhost:3001/api/chat -> 将input向量化 -> 
 
 后端：创建/api/chat接口：接收input
+
+
+
+
+## 面试表达
+什么是LangChain？
+LangChain 是一套用于构建 LLM（大语言模型）应用的开发框架：它封装了大量工具和接口，能简化 RAG 全流程的实现（比如从数据加载、处理、存储到检索、生成的完整链路）。
+举例来说，用 LangChain 实现 RAG 时，你不需要从零开发 “文本分块、向量转换、相似度检索” 等功能，直接调用它的模块（如 VectorstoreIndexCreator、RetrievalQA）就能快速搭建起 RAG 系统。
+
+RPC 是一套 “让远程函数调用像本地一样简单” 的技术方案，它封装了网络传输、数据格式转换等复杂细节；在你的 CarGPT 项目中，调用 Supabase 自定义向量检索函数的supabase.rpc()，就是 RPC 的实际应用 —— 帮你高效地完成 “前端到远程数据库函数” 的调用。
+
+## 什么是Supabase？
+Supabase 作为基于 PostgreSQL 的 BaaS（Backend as a Service，后端即服务）平台，确实完美契合了现代化 AI 应用（尤其是 RAG 架构类应用）的数据存储需求，其核心优势正是 “简化数据库远程调用” 与 “原生向量存储支持” 的结合，这两点也正是 CarGPT 项目选择它作为核心存储的关键原因。

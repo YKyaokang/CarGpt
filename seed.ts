@@ -11,6 +11,10 @@ import {
 import "dotenv/config";
 import { createClient } from "@supabase/supabase-js";
 
+import {
+  RecursiveCharacterTextSplitter
+} from "langchain/text_splitter";
+
 const supabase = createClient(
   process.env.SUPABASE_URL ?? "",
   process.env.SUPABASE_KEY ?? "",
@@ -21,9 +25,6 @@ const openai = createOpenAI({
   baseURL: process.env.OPENAI_API_BASE_URL
 })
 
-import {
-  RecursiveCharacterTextSplitter
-} from "langchain/text_splitter";
 
 
 const splitter = new RecursiveCharacterTextSplitter({
