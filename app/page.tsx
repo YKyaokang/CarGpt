@@ -3,6 +3,7 @@ import { useChat } from '@ai-sdk/react';
 import ChatOutput from '@/components/ChatOutput';
 import ChatInput from '@/components/ChatInput';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
+import Link from 'next/link';
 
 export default function Home() {
   const {
@@ -45,8 +46,22 @@ export default function Home() {
             </p>
           </div>
 
-          {/* 主题切换器 */}
-          <ThemeSwitcher />
+          {/* 导航 + 主题切换器 */}
+          <div className="flex items-center gap-2">
+            <Link
+              href="/car-match"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200
+                bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm
+                hover:shadow-md"
+              style={{
+                borderColor: 'hsl(var(--theme-primary) / 0.35)',
+                color: 'hsl(var(--theme-primary))',
+              }}
+            >
+              🎯 <span className="hidden sm:inline">智能选车</span>
+            </Link>
+            <ThemeSwitcher />
+          </div>
         </div>
 
         {/* 滚动公告栏 */}
