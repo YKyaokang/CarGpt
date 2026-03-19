@@ -4,10 +4,11 @@ import { registerUser, loginUser, getAccessTokenCookieOptions, getRefreshTokenCo
 export async function POST(req: Request) {
   try {
     const { email, password, name } = await req.json();
+    console.log(email,password,name,'----------------')
     if (!email || !password) {
       return NextResponse.json({ message: "邮箱和密码必填" }, { status: 400 });
     }
-    await registerUser({ email, password, name });
+    await registerUser({ email, password, name });  
     const { user, accessToken, refreshToken, refreshTokenExpiresAt } = await loginUser({ email, password });
 
     const res = NextResponse.json({

@@ -15,6 +15,10 @@ import {
   RecursiveCharacterTextSplitter
 } from "langchain/text_splitter";
 
+console.log(process.env.SUPABASE_URL,'-----SUPABASE_URL');
+console.log(process.env.SUPABASE_KEY,'-----SUPABASE_KEY');
+console.log(process.env.OPENAI_API_KEY,'-----OPENAI_API_KEY');
+console.log(process.env.OPENAI_API_BASE_URL,'-----OPENAI_API_BASE_URL');
 const supabase = createClient(
   process.env.SUPABASE_URL ?? "",
   process.env.SUPABASE_KEY ?? "",
@@ -77,7 +81,7 @@ const loadData = async (webpages: string[]) => {
 }
 // 知识库的来源，可配置
 loadData([
-    "https://www.dongchedi.com/",
+    "https://www.autohome.com.cn/?from=m",
     // "https://en.wikipedia.org/wiki/Samsung_Galaxy_S24",
     // "https://en.wikipedia.org/wiki/IPhone_16",
     // "https://en.wikipedia.org/wiki/IPhone_16_Pro",

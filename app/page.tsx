@@ -22,7 +22,7 @@ export default function Home() {
   const { user } = useAuth();
   
   const suggestions = [
-    "请问2025年9月发布了哪些车？",
+    "请问2026年3月发布了哪些车？",
     "20万预算推荐哪些新能源SUV？",
     "宝马BMW i4的续航大概是多少？",
     "如何保养涡轮增压发动机？",
@@ -48,7 +48,7 @@ export default function Home() {
         <div className="overflow-hidden border-t border-gray-200/60 dark:border-gray-700/60 bg-blue-50/50 dark:bg-blue-950/20">
           <div className="max-w-4xl mx-auto px-4">
             <div className="whitespace-nowrap py-1 text-sm text-blue-700 dark:text-blue-300 animate-marquee">
-              CarGpt信息已经更新到了2025年9月，欢迎体验！
+              CarGpt信息已经更新到了2026年3月，欢迎体验！
             </div>
           </div>
         </div>

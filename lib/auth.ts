@@ -58,7 +58,8 @@ export async function verifyRefreshToken(token: string) {
 export async function registerUser(params: { email: string; password: string; name?: string }) {
   const existing = await prisma.user.findUnique({ where: { email: params.email } });
   if (existing) throw new Error("Email already registered");
-
+  console.log('look =-------')
+  console.log(params.email,params.password,params.name,'----------------')
   const passwordHash = await hashPassword(params.password);
   const user = await prisma.user.create({
     data: { email: params.email, passwordHash, name: params.name ?? null },
