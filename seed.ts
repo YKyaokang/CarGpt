@@ -65,7 +65,7 @@ const loadData = async (webpages: string[]) => {
         // embedding 向量化 （对每一个块chunk进行先量化）
         for(let chunk of chunks){
           const { embedding } = await embed({
-            model: openai.embedding('text-embedding-3-small'),
+            model: openai.embedding('text-embedding-ada-002'),
             value: chunk
         })
         console.log(embedding,'-----AAAAAAAAAAAAAAAAAAAAAAAAA');
