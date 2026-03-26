@@ -21,7 +21,7 @@ import {
   
   async function generateEmbedding(message: string) {
     return embed({
-      model: openai.embedding('text-embedding-3-small'),
+      model: openai.embedding('text-embedding-ada-002'),
       value: message
     })
   }
