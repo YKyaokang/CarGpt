@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useAuth } from "@/lib/store/auth";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ function getSafeRedirect(raw: string | null): string {
   return raw;
 }
 
-export default function AuthPage() {
+function AuthPageContent() {
   const { login, register, loading } = useAuth();
   const searchParams = useSearchParams();
 
@@ -242,5 +242,13 @@ export default function AuthPage() {
         </p>
       </div>
     </main>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<main className="min-h-screen" />}>
+      <AuthPageContent />
+    </Suspense>
   );
 }
