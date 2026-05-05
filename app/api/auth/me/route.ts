@@ -12,7 +12,19 @@ export async function GET(req: Request) {
     
     if (!token) return NextResponse.json({ message: "未登录" }, { status: 401 });
     const payload = await verifyAccessToken(token);
-    const user = await prisma.user.findUnique({ where: { id: payload.sub }, select: { id: true, email: true, name: true } });
+    const user = await prisma.user.findUnique({
+      where: { id: payload.sub },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phone: true,
+        avatarUrl: true,
+        carBrand: true,
+        carModel: true,
+        carYear: true,
+      },
+    });
     if (!user) return NextResponse.json({ message: "用户不存在" }, { status: 404 });
     return NextResponse.json({ user });
   } catch (err: any) {

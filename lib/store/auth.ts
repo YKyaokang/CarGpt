@@ -1,7 +1,26 @@
 "use client";
 import { create } from "zustand";
 
-type User = { id: string; email: string; name: string | null };
+export type User = {
+  id: string;
+  email: string;
+  name: string | null;
+  phone: string | null;
+  avatarUrl: string | null;
+  carBrand: string | null;
+  carModel: string | null;
+  carYear: number | null;
+};
+
+export type UpdateUserProfilePayload = {
+  name?: string;
+  email?: string;
+  phone?: string;
+  carBrand?: string;
+  carModel?: string;
+  carYear?: number | null;
+  avatarUrl?: string;
+};
 
 type AuthState = {
   user: User | null;
@@ -10,6 +29,7 @@ type AuthState = {
   login: (email: string, password: string) => Promise<void>;
   register: (params: { name?: string; email: string; password: string }) => Promise<void>;
   fetchMe: () => Promise<void>;
+  updateProfile: (payload: UpdateUserProfilePayload) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -63,6 +83,23 @@ export const useAuth = create<AuthState>((set, get) => ({
       }
     } catch (e) {
       set({ user: null });
+    }
+  },
+
+  async updateProfile(payload) {
+    set({ loading: true, error: null });
+    try {
+      const res = await fetch("/api/user/profile", {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message || "更新失败");
+      set({ user: data.user, loading: false });
+    } catch (e: any) {
+      set({ error: e.message || "更新失败", loading: false });
+      throw e;
     }
   },
 

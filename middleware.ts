@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAccessToken, verifyRefreshToken, signAccessToken, getCookieOptions } from '@/lib/auth';
 
 // 需要登录才能访问的页面路径
-const protectedPagePaths = ['/chat', '/car-match'];
+const protectedPagePaths = ['/chat', '/car-match', '/community/create'];
 // 需要登录才能调用的 API 路径
 const protectedApiPaths = ['/api/chat', '/api/car-match'];
 

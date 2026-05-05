@@ -67,6 +67,30 @@ export default function ChatPage() {
             >
               <span className="hidden sm:inline">智能选车</span>
             </Link>
+            <Link
+              href="/community"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200
+                bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm
+                hover:shadow-md"
+              style={{
+                borderColor: 'hsl(var(--theme-primary) / 0.35)',
+                color: 'hsl(var(--theme-primary))',
+              }}
+            >
+              <span className="hidden sm:inline">社区广场</span>
+            </Link>
+            <Link
+              href="/profile"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200
+                bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm
+                hover:shadow-md"
+              style={{
+                borderColor: 'hsl(var(--theme-primary) / 0.35)',
+                color: 'hsl(var(--theme-primary))',
+              }}
+            >
+              <span className="hidden sm:inline">个人资料</span>
+            </Link>
             <ThemeSwitcher />
           </div>
         </div>

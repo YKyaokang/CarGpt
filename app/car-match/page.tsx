@@ -323,7 +323,19 @@ export default function CarMatchPage() {
               <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">AI 为您精准匹配最适合的车型</p>
             </div>
           </div>
-          <ThemeSwitcher />
+          <div className="flex items-center gap-2">
+            <Link
+              href="/profile"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm hover:shadow-md"
+              style={{
+                borderColor: "hsl(var(--theme-primary) / 0.35)",
+                color: "hsl(var(--theme-primary))",
+              }}
+            >
+              <span className="hidden sm:inline">个人资料</span>
+            </Link>
+            <ThemeSwitcher />
+          </div>
         </div>
       </div>
 

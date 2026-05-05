@@ -12,7 +12,16 @@ export async function POST(req: Request) {
     const { user, accessToken, refreshToken, refreshTokenExpiresAt } = await loginUser({ email, password });
 
     const res = NextResponse.json({
-      user: { id: user.id, email: user.email, name: user.name },
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        avatarUrl: user.avatarUrl,
+        carBrand: user.carBrand,
+        carModel: user.carModel,
+        carYear: user.carYear,
+      },
       success: true,
     });
     
