@@ -14,9 +14,142 @@ model User {
   email                  String   @unique
   passwordHash           String
   name                   String?
+  phone                  String?  @db.VarChar(20)
+  avatarUrl              String?  @db.VarChar(512)
+  carBrand               String?  @db.VarChar(50)
+  carModel               String?  @db.VarChar(50)
+  carYear                Int?
   refreshTokenHash       String?
   refreshTokenExpiresAt  DateTime?
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
+
+  posts     Post[]        @relation("UserPosts")
+  comments  Comment[]     @relation("UserComments")
+  likes     PostLike[]    @relation("UserLikes")
+  bookmarks PostBookmark[] @relation("UserBookmarks") 
+  carMatchRecords CarMatchRecord[] @relation("UserCarMatchRecords")
+  mentions  PostMention[] @relation("UserMentions")
 }
 
+model Post {
+  id           String        @id @default(cuid())
+  authorId     String
+  title        String?       @db.VarChar(255)
+  content      String        @db.LongText
+  contentType  String        @default("markdown") @db.VarChar(20)
+  status       String        @default("published") @db.VarChar(20)
+  viewCount    Int           @default(0)
+  likeCount    Int           @default(0)
+  commentCount Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  author       User          @relation("UserPosts", fields: [authorId], references: [id], onDelete: Cascade)
+  images       PostImage[]
+  tags         PostTag[]
+  mentions     PostMention[]
+  comments     Comment[]
+  likes        PostLike[]
+  bookmarks    PostBookmark[]
+
+  @@index([authorId])
+  @@index([createdAt])
+  @@index([status, createdAt])
+}
+
+model PostImage {
+  id        String   @id @default(cuid())
+  postId    String
+  url       String   @db.LongText
+  order     Int      @default(0)
+  fileName  String?  @db.VarChar(255)
+  mimeType  String?  @db.VarChar(50)
+  size      Int?
+  createdAt DateTime @default(now())
+
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+}
+
+model PostTag {
+  id     String @id @default(cuid())
+  postId String
+  tag    String @db.VarChar(50)
+
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+  @@index([tag])
+}
+
+model PostMention {
+  id          String @id @default(cuid())
+  postId      String
+  mentionedId String
+
+  post        Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  mentioned   User   @relation("UserMentions", fields: [mentionedId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, mentionedId])
+  @@index([mentionedId])
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  postId    String
+  authorId  String
+  content   String    @db.Text
+  parentId  String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User      @relation("UserComments", fields: [authorId], references: [id], onDelete: Cascade)
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("CommentReplies")
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([parentId])
+}
+
+model PostLike {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserLikes", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+  @@index([postId])
+  @@index([userId])
+}
+
+  model PostBookmark {                                                                                                  
+    id        String   @id @default(cuid())                                                                             
+    userId    String                                                                                                    
+    postId    String                                                                                                    
+    createdAt DateTime @default(now())                                                                                  
+                                                                                                                        
+    user User @relation("UserBookmarks", fields: [userId], references: [id], onDelete: Cascade)                                          
+    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)                                          
+                                                                                                                        
+    @@unique([userId, postId])                                                                                          
+  }                    
+
+  model CarMatchRecord {                                                                                                
+    id        String   @id @default(cuid())                 
+    userId    String                                                                                                    
+    summary   String   @db.VarChar(100)   // AI 生成的用户画像摘要
+    answers   Json                         // 20项问卷答案快照                                                          
+    result    Json                         // AI 返回的 top3 推荐结果                                                   
+    createdAt DateTime @default(now())                                                                                  
+                                                                                                                        
+    user      User     @relation("UserCarMatchRecords", fields: [userId], references: [id], onDelete: Cascade)          
+                                                            
+    @@index([userId, createdAt])
+  }

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { useAuth } from "@/lib/store/auth";
-import { MessageSquare, Target, Database, Zap, Brain, Car, ArrowRight, ChevronDown, LogIn, UserPlus } from "lucide-react";
+import { MessageSquare, Target, Database, Zap, Brain, Car, ArrowRight, ChevronDown, LogIn, UserPlus, Users } from "lucide-react";
 
 /* ── 计数动画 Hook ── */
 function useCountUp(end: number, duration = 2000, startOnView = true) {
@@ -96,6 +96,14 @@ export default function HomePage() {
             <Link href="/car-match"
               className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
               智能选车
+            </Link>
+            <Link href="/community"
+              className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+              社区
+            </Link>
+            <Link href="/profile"
+              className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+              个人资料
             </Link>
             <ThemeSwitcher />
             {!user && (
@@ -202,6 +210,12 @@ function HeroSection() {
             <Target className="w-5 h-5" />
             智能选车
           </Link>
+          <Link href="/community"
+            className="flex items-center gap-2 px-8 py-3.5 rounded-2xl font-semibold text-base border-2 transition-all duration-300 hover:shadow-lg hover:scale-105"
+            style={{ borderColor: "hsl(var(--theme-primary) / 0.4)", color: "hsl(var(--theme-primary))" }}>
+            <Users className="w-5 h-5" />
+            社区广场
+          </Link>
         </div>
 
         {/* 登录提示 */}
@@ -283,6 +297,11 @@ function FeaturesSection() {
       title: "实时数据更新",
       desc: "持续更新至 2026 年最新车型数据，涵盖参数、价格、评测等全方位信息",
     },
+    {
+      icon: <Users className="w-7 h-7" />,
+      title: "车主社区",
+      desc: "图文发帖、话题标签、@提及，与同好车主交流改装经验、驾驶心得",
+    },
   ];
 
   return (
@@ -297,7 +316,7 @@ function FeaturesSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((f, i) => (
             <div key={i}
               className="group relative p-8 rounded-2xl border border-gray-200/60 dark:border-gray-700/40 bg-white/50 dark:bg-gray-800/40 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-transparent"
@@ -430,6 +449,11 @@ function CTASection({ user }: { user: { id: string; email: string; name: string 
               <Target className="w-5 h-5" />
               智能选车
             </Link>
+            <Link href="/community"
+              className="flex items-center gap-2 px-8 py-3.5 rounded-2xl font-semibold text-base border-2 border-white/40 text-white transition-all duration-300 hover:bg-white/10 hover:scale-105">
+              <Users className="w-5 h-5" />
+              社区广场
+            </Link>
           </div>
           {!user && (
             <p className="text-white/60 text-sm mt-6 relative z-10">
@@ -460,6 +484,7 @@ function Footer() {
         <div className="flex items-center gap-6 text-sm text-gray-400 dark:text-gray-500">
           <Link href="/chat" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">AI 对话</Link>
           <Link href="/car-match" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">智能选车</Link>
+          <Link href="/community" className="hover:text-gray-600 dark:hover:text-gray-300 transition-colors">社区</Link>
         </div>
         <p className="text-xs text-gray-400 dark:text-gray-600">
           &copy; 2026 CarGPT. Powered by AI.

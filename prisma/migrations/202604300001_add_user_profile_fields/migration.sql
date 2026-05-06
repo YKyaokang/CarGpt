@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE `User`
+  ADD COLUMN `phone` VARCHAR(20) NULL,
+  ADD COLUMN `avatarUrl` VARCHAR(512) NULL,
+  ADD COLUMN `carBrand` VARCHAR(50) NULL,
+  ADD COLUMN `carModel` VARCHAR(50) NULL,
+  ADD COLUMN `carYear` INTEGER NULL;

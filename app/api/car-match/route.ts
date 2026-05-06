@@ -1,5 +1,18 @@
 import { createOpenAI } from '@ai-sdk/openai';
 import { generateText } from 'ai';
+import { prisma } from '@/lib/prisma';
+import { verifyAccessToken } from '@/lib/auth';
+
+function parseToken(req: Request): string | null {
+  const cookieToken = req.headers
+    .get('cookie')
+    ?.split(';')
+    .find((c) => c.trim().startsWith('access_token='))
+    ?.split('=')[1];
+  const authHeader = req.headers.get('authorization') || '';
+  const headerToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : '';
+  return cookieToken || headerToken || null;
+}
 
 const openai = createOpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -162,6 +175,25 @@ export async function POST(req: Request) {
     }
 
     const result = JSON.parse(jsonMatch[0]);
+
+    // 登录态下静默保存分析记录
+    try {
+      const token = parseToken(req);
+      if (token) {
+        const payload = await verifyAccessToken(token);
+        await prisma.carMatchRecord.create({
+          data: {
+            userId: payload.sub,
+            summary: result.summary ?? '',
+            answers: answers as object,
+            result: result as object,
+          },
+        });
+      }
+    } catch {
+      // 未登录或保存失败不影响正常返回
+    }
+
     return Response.json({ success: true, data: result });
   } catch (err) {
     console.error('car-match error:', err);
