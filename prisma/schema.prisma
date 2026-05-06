@@ -27,6 +27,8 @@ model User {
   posts     Post[]        @relation("UserPosts")
   comments  Comment[]     @relation("UserComments")
   likes     PostLike[]    @relation("UserLikes")
+  bookmarks PostBookmark[] @relation("UserBookmarks") 
+  carMatchRecords CarMatchRecord[] @relation("UserCarMatchRecords")
   mentions  PostMention[] @relation("UserMentions")
 }
 
@@ -49,6 +51,7 @@ model Post {
   mentions     PostMention[]
   comments     Comment[]
   likes        PostLike[]
+  bookmarks    PostBookmark[]
 
   @@index([authorId])
   @@index([createdAt])
@@ -126,3 +129,27 @@ model PostLike {
   @@index([userId])
 }
 
+  model PostBookmark {                                                                                                  
+    id        String   @id @default(cuid())                                                                             
+    userId    String                                                                                                    
+    postId    String                                                                                                    
+    createdAt DateTime @default(now())                                                                                  
+                                                                                                                        
+    user User @relation("UserBookmarks", fields: [userId], references: [id], onDelete: Cascade)                                          
+    post Post @relation(fields: [postId], references: [id], onDelete: Cascade)                                          
+                                                                                                                        
+    @@unique([userId, postId])                                                                                          
+  }                    
+
+  model CarMatchRecord {                                                                                                
+    id        String   @id @default(cuid())                 
+    userId    String                                                                                                    
+    summary   String   @db.VarChar(100)   // AI 生成的用户画像摘要
+    answers   Json                         // 20项问卷答案快照                                                          
+    result    Json                         // AI 返回的 top3 推荐结果                                                   
+    createdAt DateTime @default(now())                                                                                  
+                                                                                                                        
+    user      User     @relation("UserCarMatchRecords", fields: [userId], references: [id], onDelete: Cascade)          
+                                                            
+    @@index([userId, createdAt])
+  }

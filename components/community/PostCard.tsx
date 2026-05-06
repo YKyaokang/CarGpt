@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Heart, MessageCircle, Eye, MoreHorizontal, Trash2, Edit } from 'lucide-react';
+import { Heart, MessageCircle, Eye, MoreHorizontal, Trash2, Edit, Bookmark } from 'lucide-react';
 import type { Post } from '@/types/community';
 import PostImageGrid from './PostImageGrid';
 
@@ -10,6 +10,7 @@ interface Props {
   post: Post;
   currentUserId?: string | null;
   onLikeToggle?: (postId: string, isLiked: boolean) => void;
+  onBookmarkToggle?: (postId: string, isBookmarked: boolean) => void;
   onDelete?: (postId: string) => void;
 }
 
@@ -55,10 +56,12 @@ function ContentPreview({ content }: { content: string }) {
   );
 }
 
-export default function PostCard({ post, currentUserId, onLikeToggle, onDelete }: Props) {
+export default function PostCard({ post, currentUserId, onLikeToggle, onBookmarkToggle, onDelete }: Props) {
   const [liked, setLiked] = useState(post.isLiked);
   const [likeCount, setLikeCount] = useState(post.likeCount);
   const [liking, setLiking] = useState(false);
+  const [bookmarked, setBookmarked] = useState(!!post.isBookmarked);
+  const [bookmarking, setBookmarking] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   const isOwner = currentUserId === post.authorId;
@@ -95,10 +98,34 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onDelete }
     }
   };
 
-  const handleDelete = async (e: React.MouseEvent) => {
+  const handleBookmark = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!confirm('确认删除这条帖子？')) return;
+    if (bookmarking) return;
+    if (!currentUserId) {
+      window.location.href = '/auth?redirect=/community';
+      return;
+    }
+    setBookmarking(true);
+    const prevBookmarked = bookmarked;
+    setBookmarked(!bookmarked);
+    try {
+      const res = await fetch(`/api/posts/${post.id}/bookmark`, { method: 'POST' });
+      const data = await res.json();
+      if (res.ok) {
+        setBookmarked(data.isBookmarked);
+        onBookmarkToggle?.(post.id, data.isBookmarked);
+      } else {
+        setBookmarked(prevBookmarked);
+      }
+    } catch {
+      setBookmarked(prevBookmarked);
+    } finally {
+      setBookmarking(false);
+    }
+  };
+
+  const handleDelete = async (e: React.MouseEvent) => {
     try {
       const res = await fetch(`/api/posts/${post.id}`, { method: 'DELETE' });
       if (res.ok) onDelete?.(post.id);
@@ -220,6 +247,18 @@ export default function PostCard({ post, currentUserId, onLikeToggle, onDelete }
             <Eye className="w-4 h-4" />
             <span>{post.viewCount}</span>
           </div>
+
+          {/* 收藏 */}
+          <button
+            onClick={handleBookmark}
+            className={`flex items-center gap-1.5 text-sm transition-colors ${
+              bookmarked
+                ? 'text-yellow-500'
+                : 'text-gray-400 hover:text-yellow-500 dark:text-gray-500 dark:hover:text-yellow-400'
+            }`}
+          >
+            <Bookmark className={`w-4 h-4 ${bookmarked ? 'fill-current' : ''}`} />
+          </button>
         </div>
       </article>
     </Link>

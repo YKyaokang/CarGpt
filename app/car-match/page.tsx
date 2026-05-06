@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import CarMatchResult, { type MatchData } from "@/components/CarMatchResult";
+import { useAuth } from "@/lib/store/auth";
 
 interface Answers {
   adventure: number; spending: number; family: number; techLove: number;
@@ -267,6 +268,7 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
 
 // ── 主页面 ───────────────────────────────────────────────────────────────────
 export default function CarMatchPage() {
+  const { user } = useAuth();
   const [answers, setAnswers] = useState<Answers>(INIT);
   const [step, setStep] = useState<"personality" | "habits" | "loading" | "result">("personality");
   const [result, setResult] = useState<MatchData | null>(null);
@@ -324,6 +326,18 @@ export default function CarMatchPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {user && (
+              <Link
+                href="/car-match/history"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm hover:shadow-md"
+                style={{
+                  borderColor: "hsl(var(--theme-primary) / 0.35)",
+                  color: "hsl(var(--theme-primary))",
+                }}
+              >
+                <span>历史记录</span>
+              </Link>
+            )}
             <Link
               href="/profile"
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium border transition-all duration-200 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm hover:shadow-md"

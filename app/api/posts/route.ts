@@ -89,6 +89,10 @@ export async function GET(req: Request) {
             where: { userId: currentUserId ?? '' },
             select: { id: true },
           },
+          bookmarks: {
+            where: { userId: currentUserId ?? '' },
+            select: { id: true },
+          },
         },
       }),
       prisma.post.count({ where }),
@@ -97,7 +101,9 @@ export async function GET(req: Request) {
     const posts = rawPosts.map((p) => ({
       ...p,
       likes: undefined,
+      bookmarks: undefined,
       isLiked: currentUserId ? ((p as { likes?: { id: string }[] }).likes?.length ?? 0) > 0 : false,
+      isBookmarked: currentUserId ? ((p as { bookmarks?: { id: string }[] }).bookmarks?.length ?? 0) > 0 : false,
     }));
 
     return NextResponse.json({ posts, total, page, pageSize, hasMore: page * pageSize < total });

@@ -38,6 +38,7 @@ export interface Post {
   images: PostImageData[];
   tags: PostTagData[];
   isLiked: boolean;
+  isBookmarked: boolean;
 }
 
 export interface CommentData {

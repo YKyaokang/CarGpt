@@ -57,7 +57,7 @@ export async function verifyRefreshToken(token: string) {
 
 export async function registerUser(params: { email: string; password: string; name?: string }) {
   const existing = await prisma.user.findUnique({ where: { email: params.email } });
-  if (existing) throw new Error("Email already registered");
+  if (existing) throw new Error("该邮箱已存在");
   console.log('look =-------')
   console.log(params.email,params.password,params.name,'----------------')
   const passwordHash = await hashPassword(params.password);
@@ -69,9 +69,9 @@ export async function registerUser(params: { email: string; password: string; na
 
 export async function loginUser(params: { email: string; password: string }) {
   const user = await prisma.user.findUnique({ where: { email: params.email } });
-  if (!user) throw new Error("Invalid email or password");
+  if (!user) throw new Error("账号或者密码错误");
   const ok = await verifyPassword(params.password, user.passwordHash);
-  if (!ok) throw new Error("Invalid email or password");
+  if (!ok) throw new Error("账号或者密码错误");
 
   const accessToken = await signAccessToken(user.id, user.email);
   const { token: refreshToken, expiresAt } = await signRefreshToken(user.id, user.email);
